@@ -30,6 +30,10 @@ def graficar_espectros(frequencies, fft_result, fft_result_filtered):
     frequencies = frequencies[positive_freqs]
     fft_result = np.abs(fft_result[positive_freqs])
     fft_result_filtered = np.abs(fft_result_filtered[positive_freqs])
+
+    # Encontrar los máximos
+    max_original = np.max(fft_result)
+    max_filtered = np.max(fft_result_filtered)
     
     fig, axs = plt.subplots(1, 2, figsize=(12, 6))
 
@@ -39,8 +43,8 @@ def graficar_espectros(frequencies, fft_result, fft_result_filtered):
     axs[0].set_ylabel('Amplitud')
     axs[0].set_title('Espectro de la señal de audio')
     axs[0].grid()
-    axs[0].set_ylim(0, 1000)  # Limitar la amplitud a 200
-    axs[0].set_xlim(0, 5000)  # Limitar el eje x hasta 5000
+    axs[0].set_ylim(0, max_original * 1.1)  # Ajustar el límite Y al máximo de la gráfica
+    axs[0].set_xlim(0, 8000)  # Limitar el eje x a 8000 Hz
     axs[0].axvline(x=1600, color='red', linestyle='--')  # Línea en x=1600
     axs[0].axvline(x=3600, color='red', linestyle='--')  # Línea en x=3600
 
@@ -50,19 +54,20 @@ def graficar_espectros(frequencies, fft_result, fft_result_filtered):
     axs[1].set_ylabel('Amplitud')
     axs[1].set_title('Espectro de la señal filtrada')
     axs[1].grid()
-    axs[1].set_ylim(0, 1000)  # Limitar la amplitud a 200
-    axs[1].set_xlim(0, 5000)  # Limitar el eje x hasta 5000
+    axs[1].set_ylim(0, max_filtered * 1.1)  # Ajustar el límite Y al máximo de la gráfica
+    axs[1].set_xlim(0, 8000)  # Limitar el eje x a 8000 Hz
     axs[1].axvline(x=1600, color='red', linestyle='--')  # Línea en x=1600
     axs[1].axvline(x=3600, color='red', linestyle='--')  # Línea en x=3600
 
     plt.tight_layout()
-    plt.savefig('grafica.png')
+    plt.savefig('grafica_ajustada.png')
     plt.show()
+
 
 def start_recording():
     global audio_signal, filtered_signal
 
-    duracion = 2 
+    duracion = 15
     fs = 44100
 
     audio_signal = grabar_audio(duracion, fs)
